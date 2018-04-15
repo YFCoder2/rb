@@ -12,20 +12,22 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
 public class App {
+
     public static void main( String[] args ) throws Exception {
     	ConnectionFactory factory = new ConnectionFactory();
-    	factory.setHost("192.168.120.131");
+    	factory.setHost("10.211.55.19");
     	factory.setPort(5672);
-    	factory.setUsername("guest");
-    	factory.setPassword("guest");
+    	factory.setUsername("mqadmin");
+    	factory.setPassword("mqadmin");
     	factory.setVirtualHost("/");
     	
     	Connection conn = factory.newConnection();
     	
     	Channel channel = conn.createChannel();
-    	
-    	//创建Exchange（可重复执行，不会重复创建）
-//    	channel.exchangeDeclare("log", "direct");
+    	Channel channel1 = conn.createChannel();
+
+//    	创建Exchange（可重复执行，不会重复创建）
+    	channel.exchangeDeclare("log", "direct");
     	
     	
 //    	channel.exchangeDeclareNoWait(exchange, type, durable, autoDelete, internal, arguments);
@@ -49,11 +51,12 @@ public class App {
 //    	System.out.println(ok);
     	
     	//删除exchange（可重复执行）
-//    	channel.exchangeDelete("log.info");
+    	channel.exchangeDelete("log");
 //    	channel.exchangeDelete("log.warn");
     	
     	//创建Queue（可重复执行，不会重复创建）
-//    	Queue.DeclareOk ok = channel.queueDeclare("info_queue", true, false, false, null);
+    	Queue.DeclareOk ok = channel.queueDeclare("info_queue", true, false, false, null);
+		TimeUnit.SECONDS.sleep(20);
 //    	System.out.println(ok);
     	
 //    	channel.queueDeclareNoWait(queue, durable, exclusive, autoDelete, arguments);
@@ -73,10 +76,10 @@ public class App {
 //    	channel.queueBindNoWait(queue, exchange, routingKey, arguments);
     	
     	//exchange和queue进行解绑（可重复执行）
-    	channel.queueUnbind("info_queue", "log", "info");
-    	
-    	//exchange和exchange进行解绑（可重复执行）
-    	channel.exchangeUnbind("log", "log.debug", "debug");
+//    	channel.queueUnbind("info_queue", "log", "info");
+//
+//    	//exchange和exchange进行解绑（可重复执行）
+//    	channel.exchangeUnbind("log", "log.debug", "debug");
     	
 //    	TimeUnit.SECONDS.sleep(10);
     	
