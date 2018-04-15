@@ -41,6 +41,7 @@ public class App {
 //
 //    	rabbit.declareExchange(new HeadersExchange("log.headers.exchange", true, false));
 //
+           //删除
 ////    	rabbit.deleteExchange("log.headers.exchange");
 //
 //    	rabbit.declareQueue(new Queue("log.debug", true));
