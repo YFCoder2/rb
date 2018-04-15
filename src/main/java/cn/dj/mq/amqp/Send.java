@@ -1,4 +1,4 @@
-package cn.dj.mq.sc;
+package cn.dj.mq.amqp;
 
 import cn.dj.mq.MqConstant;
 import com.rabbitmq.client.AMQP.BasicProperties;
