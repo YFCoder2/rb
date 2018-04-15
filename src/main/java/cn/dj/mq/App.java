@@ -15,10 +15,10 @@ public class App {
 
     public static void main( String[] args ) throws Exception {
     	ConnectionFactory factory = new ConnectionFactory();
-    	factory.setHost("10.211.55.19");
-    	factory.setPort(5672);
-    	factory.setUsername("mqadmin");
-    	factory.setPassword("mqadmin");
+    	factory.setHost(MqConstant.url);
+    	factory.setPort(MqConstant.port);
+    	factory.setUsername(MqConstant.user);
+    	factory.setPassword(MqConstant.pwd);
     	factory.setVirtualHost("/");
     	
     	Connection conn = factory.newConnection();
