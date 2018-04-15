@@ -3,6 +3,7 @@ package cn.dj.mq.springmq;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
@@ -12,8 +13,20 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.amqp.core.MessageProperties;
+import org.springframework.amqp.core.MessagePostProcessor;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
+import org.springframework.amqp.core.MessageProperties;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+
+
 
 @ComponentScan
 public class App {
@@ -27,13 +40,13 @@ public class App {
 
     public static void main( String[] args ) {
     	AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(App.class);
-    	
-    	RabbitAdmin rabbit = context.getBean(RabbitAdmin.class);
-    	System.out.println(rabbit);
-    	
-    	//以下代码都可以重复执行
-    	
-    	rabbit.declareExchange(new DirectExchange("log.direct.exchange", true, false));
+//
+//    	RabbitAdmin rabbit = context.getBean(RabbitAdmin.class);
+//    	System.out.println(rabbit);
+//
+//    	//以下代码都可以重复执行
+//
+//    	rabbit.declareExchange(new DirectExchange("log.direct.exchange", true, false));
     	
 //    	rabbit.declareExchange(new TopicExchange("log.topic.exchange", true, false));
 //
@@ -80,6 +93,26 @@ public class App {
 //    	//exchange和exchange的binding
 //    	rabbit.declareBinding(new Binding("log.all", Binding.DestinationType.EXCHANGE, "log.info", "info", new HashMap<String, Object>()));
 //    	rabbit.declareBinding(BindingBuilder.bind(new TopicExchange("sms.all")).to(new TopicExchange("sms.reg")).with("reg"));
+
+		RabbitTemplate rabbit = context.getBean(RabbitTemplate.class);
+
+		rabbit.convertAndSend("", "pay2", "this is text message and post processor", new MessagePostProcessor() {
+			@Override
+			public Message postProcessMessage(Message message) throws AmqpException {
+				System.out.println("-----------处理前message---------");
+				System.out.println(message);
+				message.getMessageProperties().getHeaders().put("type", 20);
+				message.getMessageProperties().getHeaders().put("desc", "这是一条经过后置处理过的消息");
+				return message;
+			}
+		});
+
+		rabbit.convertAndSend("", "pay2", "before body", message -> {
+			MessageProperties mp = new MessageProperties();
+			mp.getHeaders().put("desc", "消息发送");
+			mp.getHeaders().put("type", "100");
+			return new Message("after body".getBytes(), mp);
+		});
     	
     	context.close();
     }
