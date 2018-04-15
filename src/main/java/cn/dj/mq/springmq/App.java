@@ -93,10 +93,37 @@ public class App {
 //    	//exchange和exchange的binding
 //    	rabbit.declareBinding(new Binding("log.all", Binding.DestinationType.EXCHANGE, "log.info", "info", new HashMap<String, Object>()));
 //    	rabbit.declareBinding(BindingBuilder.bind(new TopicExchange("sms.all")).to(new TopicExchange("sms.reg")).with("reg"));
+//------------------------  一下为发送消息的模拟---------------------------------
+		RabbitTemplate rt = context.getBean(RabbitTemplate.class);
 
-		RabbitTemplate rabbit = context.getBean(RabbitTemplate.class);
+		Message message = new Message("hello word!!".getBytes(),new MessageProperties());
+		rt.send(message);
 
-		rabbit.convertAndSend("", "pay2", "this is text message and post processor", new MessagePostProcessor() {
+
+//    	MessageProperties mp = new MessageProperties();
+//    	mp.getHeaders().put("desc", "消息发送");
+//    	mp.getHeaders().put("type", "100");
+//    	Message message = new Message("hello".getBytes(), mp);
+		//使用RabbitTemplate对象默认的exchange，RoutingKey
+//    	rt.send(message);
+
+		//使用RabbitTemplate对象默认的exchange，自己指定RoutingKey
+//    	rt.send("info", message);
+
+		//指定exchange，RoutingKey发送消息
+//    	rt.send("", "pay", message);
+
+//    	rt.send("", "pay2", message, new CorrelationData("springamqp"));
+
+//    	rt.convertAndSend("this is text message");
+
+//    	rt.convertAndSend("info", "this is text message");
+
+//    	rt.convertAndSend("", "pay", "this is text message");
+
+
+
+		rt.convertAndSend("", "pay2", "this is text message and post processor", new MessagePostProcessor() {
 			@Override
 			public Message postProcessMessage(Message message) throws AmqpException {
 				System.out.println("-----------处理前message---------");
@@ -107,7 +134,7 @@ public class App {
 			}
 		});
 
-		rabbit.convertAndSend("", "pay2", "before body", message -> {
+		rt.convertAndSend("", "pay2", "before body", msg -> {
 			MessageProperties mp = new MessageProperties();
 			mp.getHeaders().put("desc", "消息发送");
 			mp.getHeaders().put("type", "100");
