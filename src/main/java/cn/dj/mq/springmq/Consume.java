@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
  * Created by huangzhiwei on 2018/4/15.
  */
 @ComponentScan
+@Deprecated
 public class Consume {
     public static void main( String[] args ) throws Exception{
 

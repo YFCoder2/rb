@@ -1,10 +1,13 @@
 package cn.dj.mq.springmq;
 
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageListener;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory.CacheMode;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,5 +34,21 @@ public class MQConfig {
 		rabbit.setExchange("log.direct.exchange");
 		rabbit.setRoutingKey("debug");
 		return rabbit;
+	}
+   @Bean
+	public SimpleMessageListenerContainer messageListenerContainer(ConnectionFactory connectionFactory) {
+		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+		container.setConnectionFactory(connectionFactory);
+		container.setAutoStartup(false);
+		container.setQueueNames("debug.queue");
+		container.setMessageListener(new MessageListener() {
+			@Override
+			public void onMessage(Message message) {
+				System.out.println("-------------接收到消息------------");
+				System.out.println(message.getMessageProperties());
+				System.out.println(new String(message.getBody()));
+			}
+		});
+		return container;
 	}
 }
