@@ -2,7 +2,6 @@ package cn.dj.mq.amqp;
 
 import java.util.concurrent.TimeUnit;
 
-import cn.dj.mq.MqConstant;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;

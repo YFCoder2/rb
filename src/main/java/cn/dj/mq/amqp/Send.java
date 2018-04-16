@@ -1,6 +1,5 @@
 package cn.dj.mq.amqp;
 
-import cn.dj.mq.MqConstant;
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;

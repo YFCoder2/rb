@@ -1,4 +1,4 @@
-package cn.dj.mq;
+package cn.dj.mq.amqp;
 
 /**
  * Created by huangzhiwei on 2018/4/15.
