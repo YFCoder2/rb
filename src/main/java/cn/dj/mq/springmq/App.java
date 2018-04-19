@@ -2,6 +2,7 @@ package cn.dj.mq.springmq;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.Binding;
@@ -11,6 +12,7 @@ import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.HeadersExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -27,7 +29,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.ComponentScan;
 
 
-
+@EnableRabbit
 @ComponentScan
 public class App {
 
@@ -38,7 +40,7 @@ public class App {
 		context.close();
 	}
 
-    public static void main( String[] args ) {
+    public static void main( String[] args ) throws Exception {
     	AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(App.class);
 //
 //    	RabbitAdmin rabbit = context.getBean(RabbitAdmin.class);
@@ -128,8 +130,8 @@ public class App {
 			public Message postProcessMessage(Message message) throws AmqpException {
 				System.out.println("-----------处理前message---------");
 				System.out.println(message);
-				message.getMessageProperties().getHeaders().put("type", 20);
-				message.getMessageProperties().getHeaders().put("desc", "这是一条经过后置处理过的消息");
+				message.getMessageProperties().getHeaders().put("type", 21);
+				message.getMessageProperties().getHeaders().put("desc", "这是一条经过后置处理过的消息--416");
 				return message;
 			}
 		});
@@ -142,7 +144,7 @@ public class App {
 		});
 
 
-    	
+		TimeUnit.SECONDS.sleep(5);
     	context.close();
     }
 }

@@ -19,7 +19,7 @@ public class Consume {
     	Connection conn = factory.newConnection();
     	Channel channel = conn.createChannel();
 
-    	channel.basicConsume("log_queue", true, new SimpleConsumer(channel));
+    	channel.basicConsume("log.debug", true, new SimpleConsumer(channel));
     	
     	TimeUnit.SECONDS.sleep(120);
     	

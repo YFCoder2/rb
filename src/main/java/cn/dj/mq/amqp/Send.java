@@ -26,7 +26,7 @@ public class Send {
 //    	channel.basicPublish("sms", "forget", props, "忘记密码，验证码1234".getBytes());
 //    	channel.basicPublish("sms", "reg", props, "注册，验证码1234".getBytes());
     	
-    	channel.basicPublish("log", "debug.user", props, "用户登录info".getBytes());
+    	channel.basicPublish("log", "debug", props, "用户登录info".getBytes());
 //    	channel.basicPublish("log", "info.user", props, "用户登录info".getBytes());
     	
     	channel.close();

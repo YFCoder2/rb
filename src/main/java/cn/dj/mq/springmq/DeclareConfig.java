@@ -12,6 +12,8 @@ import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.HeadersExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.listener.RabbitListenerContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -40,7 +42,7 @@ public class DeclareConfig {
 	
 	@Bean
 	public Queue pay() {
-		Queue q = new Queue("pay", true);
+		Queue q = new Queue("pay2", true);
 		q.setShouldDeclare(true);
 		return q;
 	}
@@ -106,4 +108,8 @@ public class DeclareConfig {
 	public Exchange headersExchange() {
 		return new HeadersExchange("log.headers.exchange", true, false);
 	}
+
+
+
+
 }

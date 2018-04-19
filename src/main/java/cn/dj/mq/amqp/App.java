@@ -20,7 +20,7 @@ public class App {
     	Connection conn = factory.newConnection();
     	
     	Channel channel = conn.createChannel();
-    	Channel channel1 = conn.createChannel();
+    	//Channel channel1 = conn.createChannel();
 
 //    	创建Exchange（可重复执行，不会重复创建）
     	channel.exchangeDeclare("log", "direct");
@@ -47,12 +47,12 @@ public class App {
 //    	System.out.println(ok);
     	
     	//删除exchange（可重复执行）
-    	channel.exchangeDelete("log");
+    	//channel.exchangeDelete("log");
 //    	channel.exchangeDelete("log.warn");
     	
     	//创建Queue（可重复执行，不会重复创建）
     	Queue.DeclareOk ok = channel.queueDeclare("info_queue", true, false, false, null);
-		TimeUnit.SECONDS.sleep(20);
+	//	TimeUnit.SECONDS.sleep(20);
 //    	System.out.println(ok);
     	
 //    	channel.queueDeclareNoWait(queue, durable, exclusive, autoDelete, arguments);
@@ -67,7 +67,7 @@ public class App {
 //    	channel.queueBind("info_queue", "log", "info");
     	
     	//exchange和exchange进行绑定（可重复执行，不会重复创建）
-//    	channel.exchangeBind("log", "log.debug", "debug");
+    	channel.exchangeBind("log", "log.debug", "debug");
     	
 //    	channel.queueBindNoWait(queue, exchange, routingKey, arguments);
     	
